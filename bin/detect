@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+echo "detect in progress ..."
 
 if [ -f "$1/Cargo.toml" ]; then
     echo "Rust"
