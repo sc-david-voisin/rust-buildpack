@@ -11,8 +11,12 @@ echo "CACHE_DIR: $CACHE_DIR"
 echo "ENV_DIR: $ENV_DIR"
 
 echo "-----> Install cargo"
-apt install --yes cargo
+curl https://sh.rustup.rs -sSf > rustup.sh
+chmod u+x rustup.sh
+./rustup.sh -y
+
+CARGO=~/.cargo/bin/cargo
+$CARGO --version
 
 echo "-----> Compile the application"
-cd $BUILD_DIR
-cargo build --release
+cd "$BUILD_DIR" && $CARGO build --release
