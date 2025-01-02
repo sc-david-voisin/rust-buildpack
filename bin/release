@@ -6,5 +6,5 @@ addons:
 config_vars:
   PATH: /usr/bin:/bin
 default_process_types:
-  web: ls -l && cargo run
+  web: whoami && ls -la && pwd && cargo run
 EOF

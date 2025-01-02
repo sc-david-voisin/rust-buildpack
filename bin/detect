@@ -1,8 +1,10 @@
 #!/bin/bash
 
+BUILD_DIR=${1:-}
+
 echo "detect in progress ..."
 
-if [ -f "$1/Cargo.toml" ]; then
+if [ -f "$BUILD_DIR/Cargo.toml" ]; then
     echo "Rust"
     exit 0
 else
