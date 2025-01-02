@@ -21,7 +21,7 @@ if [ -x $CARGO_DIR ]; then
 else
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
-    ./rustup.sh -y --default-toolchain minimal
+    ./rustup.sh -y
     rm rustup.sh
 fi
 cargo --version
