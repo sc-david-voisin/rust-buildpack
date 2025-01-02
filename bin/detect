@@ -1,8 +1,7 @@
 #!/bin/bash
+# usage: bin/detect <build-dir>
 
 BUILD_DIR=${1:-}
-
-echo "detect in progress ..."
 
 if [ -f "$BUILD_DIR/Cargo.toml" ]; then
     echo "Rust"

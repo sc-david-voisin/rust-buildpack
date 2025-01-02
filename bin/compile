@@ -1,6 +1,7 @@
 #!/bin/bash
+# usage: bin/compile <build-dir> <cache-dir> <env-dir>
 
-echo "compile in progress ..."
+set -ex
 
 BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
@@ -10,26 +11,19 @@ echo "BUILD_DIR: $BUILD_DIR"
 echo "CACHE_DIR: $CACHE_DIR"
 echo "ENV_DIR: $ENV_DIR"
 
-CARGO_DIR="$HOME/.cargo/bin"
-
-export PATH=$PATH:$CARGO_DIR
+CARGO="$HOME/.cargo/bin/cargo"
 
 echo "-----> Install cargo"
-if [ -x $CARGO_DIR ]; then
+if [ -x "$CARGO" ]; then
     echo "cargo already installed"
 else
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
-    ./rustup.sh -y
-
-    rm rustup.sh
-    rm -rf .rustup  # saves 1.3 GB!
+    ./rustup.sh -y --profile minimal
+    rm -f rustup.sh
 fi
-cargo --version
+$CARGO --version
 
 echo "-----> Compile the application"
-cargo build --release --manifest-path "$BUILD_DIR/Cargo.toml"
-
-pwd
-ls -la "$BUILD_DIR"
-du -sh "$BUILD_DIR"
+$CARGO build --release --manifest-path "$BUILD_DIR/Cargo.toml"
+find "$BUILD_DIR/target/release" -maxdepth 1 -type f -executable -exec cp -a -t "$BUILD_DIR" {} \;

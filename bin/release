@@ -1,9 +1,4 @@
 #!/bin/bash
+# usage: bin/release <build-dir>
 
-cat << EOF
----
-addons:
-config_vars:
-default_process_types:
-  web: whoami && ls -la && pwd && echo $PATH && /app/.cargo/bin/cargo run
-EOF
+echo "--- {}"
