@@ -1,15 +1,11 @@
 #!/bin/bash
 # usage: bin/compile <build-dir> <cache-dir> <env-dir>
 
-set -ex
+set -e
 
 BUILD_DIR=${1:-}
-CACHE_DIR=${2:-}
-ENV_DIR=${3:-}
-
-echo "BUILD_DIR: $BUILD_DIR"
-echo "CACHE_DIR: $CACHE_DIR"
-echo "ENV_DIR: $ENV_DIR"
+#CACHE_DIR=${2:-}
+#ENV_DIR=${3:-}
 
 CARGO="$HOME/.cargo/bin/cargo"
 
@@ -22,7 +18,6 @@ else
     ./rustup.sh -y --profile minimal
     rm -f rustup.sh
 fi
-$CARGO --version
 
 echo "-----> Compile the application"
 $CARGO build --release --manifest-path "$BUILD_DIR/Cargo.toml"
