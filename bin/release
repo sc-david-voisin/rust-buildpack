@@ -6,7 +6,7 @@ cat << EOF
 ---
 addons:
 config_vars:
-  PATH: /app/bin:/usr/bin:/bin
+  PATH: ~/.cargo/bin:/usr/bin:/bin
 default_process_types:
   web: cargo run
 EOF
