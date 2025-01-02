@@ -1,15 +1,22 @@
 #!/bin/bash
 # usage: bin/compile <build-dir> <cache-dir> <env-dir>
 
-set -e
+set -ex
 
 BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
 #ENV_DIR=${3:-}
 
-CARGO="$HOME/.cargo/bin/cargo"
+
+CARGO_CACHE_DIR="$CACHE_DIR/cargo"
+CARGO_HOME="$HOME/.cargo"   # imposed by rustup
+CARGO="$CARGO_HOME/bin/cargo"
 
 echo "-----> Install cargo"
+mkdir -p "$CARGO_CACHE_DIR"
+rm -f "$CARGO_HOME"
+ln -s "$CARGO_CACHE_DIR" "$CARGO_HOME"
+
 cd "$CACHE_DIR" # so as to copy rustup (including rustc and cargo) in cache
 if [ ! -x "rustup.sh" ]; then
     curl https://sh.rustup.rs -sSf > rustup.sh
