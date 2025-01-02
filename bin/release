@@ -4,7 +4,6 @@ cat << EOF
 ---
 addons:
 config_vars:
-  PATH: /app/.cargo/bin/:/usr/bin:/bin
 default_process_types:
-  web: whoami && ls -la && pwd && echo $PATH && cargo run
+  web: whoami && ls -la && pwd && echo $PATH && /app/.cargo/bin/cargo run
 EOF
