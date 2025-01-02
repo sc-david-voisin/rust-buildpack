@@ -10,10 +10,13 @@ echo "BUILD_DIR: $BUILD_DIR"
 echo "CACHE_DIR: $CACHE_DIR"
 echo "ENV_DIR: $ENV_DIR"
 
-CARGO=~/.cargo/bin/cargo
+CARGO_DIR=~/.cargo/bin
+
+export PATH=$PATH:~/.cargo/bin
+
 
 echo "-----> Install cargo"
-if [ -x $CARGO ]; then
+if [ -x $CARGO_DIR ]; then
     echo "cargo already installed"
 else
     curl https://sh.rustup.rs -sSf > rustup.sh
@@ -21,10 +24,12 @@ else
     ./rustup.sh -y --default-toolchain minimal
     rm rustup.sh
 fi
-$CARGO --version
+cargo --version
+
 
 echo "-----> Compile the application"
-$CARGO build --release --manifest-path "$BUILD_DIR/Cargo.toml"
+cargo build --release --manifest-path "$BUILD_DIR/Cargo.toml"
+
 
 pwd
 ls -la "$BUILD_DIR"
