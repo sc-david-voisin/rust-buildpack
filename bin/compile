@@ -18,11 +18,15 @@ if [ -x $CARGO ]; then
 else
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
-    ./rustup.sh -y
+    ./rustup.sh -y --default-toolchain minimal
+    rm rustup.sh
 fi
 $CARGO --version
 
 echo "-----> Compile the application"
-cd "$BUILD_DIR" && \
-    $CARGO clean && \   # clean residual files from previous builds
-    $CARGO build --release
+$CARGO build --release --manifest-path "$BUILD_DIR/Cargo.toml"
+
+pwd
+ls -la "$BUILD_DIR"
+du -sh "$BUILD_DIR"
+du -h "$BUILD_DIR"
