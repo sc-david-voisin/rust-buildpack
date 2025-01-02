@@ -12,8 +12,7 @@ echo "ENV_DIR: $ENV_DIR"
 
 CARGO_DIR=~/.cargo/bin
 
-export PATH=$PATH:~/.cargo/bin
-
+export PATH=$PATH:$CARGO_DIR
 
 echo "-----> Install cargo"
 if [ -x $CARGO_DIR ]; then
@@ -22,16 +21,15 @@ else
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
     ./rustup.sh -y
+
     rm rustup.sh
+    rm -rf .rustup  # saves 1.3 GB!
 fi
 cargo --version
-
 
 echo "-----> Compile the application"
 cargo build --release --manifest-path "$BUILD_DIR/Cargo.toml"
 
-
 pwd
 ls -la "$BUILD_DIR"
 du -sh "$BUILD_DIR"
-du -h "$BUILD_DIR"
