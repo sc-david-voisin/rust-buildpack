@@ -4,21 +4,19 @@
 set -e
 
 BUILD_DIR=${1:-}
-#CACHE_DIR=${2:-}
+CACHE_DIR=${2:-}
 #ENV_DIR=${3:-}
 
 CARGO="$HOME/.cargo/bin/cargo"
 
 echo "-----> Install cargo"
-if [ -x "$CARGO" ]; then
-    echo "cargo already installed"
-else
+cd "$CACHE_DIR" # so as to copy rustup (including rustc and cargo) in cache
+if [ ! -x "rustup.sh" ]; then
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
-    ./rustup.sh -y --profile minimal
-    rm -f rustup.sh
 fi
+./rustup.sh -y --profile minimal
 
 echo "-----> Compile the application"
-$CARGO build --release --manifest-path "$BUILD_DIR/Cargo.toml"
-find "$BUILD_DIR/target/release" -maxdepth 1 -type f -executable -exec cp -a -t "$BUILD_DIR" {} \;
+$CARGO build --release --manifest-path "$BUILD_DIR/Cargo.toml" --target-dir "$CACHE_DIR/target"
+find "$CACHE_DIR/target/release" -maxdepth 1 -type f -executable -exec cp -a -t "$BUILD_DIR" {} \;
