@@ -3,6 +3,11 @@
 
 set -e
 
+# debug
+if [ "$BUILDPACK_DEBUG" = "true" ] ; then
+  set -x
+fi
+
 BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
 #ENV_DIR=${3:-}
@@ -12,7 +17,7 @@ CACHE_DIR=${2:-}
 export RUSTUP_HOME="$CACHE_DIR/rustup"
 
 # Have rustup install cargo in cache directory.
-# cargo holds rust tools executables and the downloaded pacakges.
+# cargo holds rust tools executables and the downloaded packages.
 export CARGO_HOME="$CACHE_DIR/cargo"
 
 export PATH="$CARGO_HOME/bin:$PATH"
