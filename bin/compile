@@ -22,6 +22,6 @@ fi
 
 echo "-----> Compile the application"
 #cargo build --release --manifest-path "$BUILD_DIR/Cargo.toml" --target-dir "$CACHE_DIR/target"
-cargo install --path "$BUILD_DIR" --target-dir "$CACHE_DIR/target" --root "/usr/local"
+cargo install --path "$BUILD_DIR" --target-dir "$CACHE_DIR/target" --root "/app"
 
 #find "$CACHE_DIR/target/release" -maxdepth 1 -type f -executable -exec cp -a -t "$BUILD_DIR" {} \;
