@@ -1,39 +1,42 @@
 #!/bin/bash
 # usage: bin/compile <build-dir> <cache-dir> <env-dir>
 
-set -e
+set -eo pipefail
 
-# debug
-if [ "$BUILDPACK_DEBUG" = "true" ] ; then
-  set -x
-fi
+# shellcheck disable=SC1090
+source "$( readlink -f "$( dirname "${0}" )/../vendor/cmnlib.sh" )"
 
-BUILD_DIR=${1:-}
-CACHE_DIR=${2:-}
-#ENV_DIR=${3:-}
+cmn::main::start "${0}" "${1}" "${2}" "${3}"
 
 # Have rustup install itself in cache directory.
-# rustup installs rust compiler (rustc) and package manager (cargo).
-export RUSTUP_HOME="$CACHE_DIR/rustup"
+# shellcheck disable=SC2154
+export RUSTUP_HOME="$cache_dir/rustup"
 
 # Have rustup install cargo in cache directory.
 # cargo holds rust tools executables and the downloaded packages.
-export CARGO_HOME="$CACHE_DIR/cargo"
-
+export CARGO_HOME="$cache_dir/cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 
-echo "-----> Install cargo"
-cd "$CACHE_DIR"
+cmn::step::start "Installing rust"
+pushd "$cache_dir"
+
 if [ ! -x "rustup.sh" ]; then
+    cmn::task::start "Downloading rustup (rust official installer)"
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
+    cmn::task::finish
 fi
 
 # Use minimal profile to save disk space.
-# Mininal profile provides rust compiler (rustc) and package manager (cargo).
+# This profile provides rust compiler (rustc) and package manager (cargo).
+cmn::task::start "Installing rust"
 ./rustup.sh -y --profile minimal
+cmn::task::finish
+popd
 
-echo "-----> Compile the application"
+cmn::step::start "Compile the application"
+# `cargo install` builds release binaries and copy them in build_dir/bin directory.
+# shellcheck disable=SC2154
+cargo install --path "$build_dir" --target-dir "$cache_dir/target" --root "$build_dir"
 
-# `cargo install` builds release binaries and copy them in BUILD_DIR/bin directory.
-cargo install --path "$BUILD_DIR" --target-dir "$CACHE_DIR/target" --root "$BUILD_DIR"
+cmn::main::finish
