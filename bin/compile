@@ -15,7 +15,7 @@ export RUSTUP_HOME
 
 # Have rustup install cargo in cache directory.
 # cargo holds rust tools executables and the downloaded packages.
-export CARGO_HOME="$cache_dir/cargo"
+export CARGO_HOME="${cache_dir:?}/cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 
 cmn::step::start "Installing rust"
