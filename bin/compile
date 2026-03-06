@@ -33,7 +33,7 @@ fi
 cmn::task::start "Installing rust"
 ./rustup.sh -y --profile minimal
 cmn::task::finish
-popd
+popd > /dev/null
 
 cmn::step::start "Compile the application"
 # `cargo install` builds release binaries and copy them in build_dir/bin directory.
