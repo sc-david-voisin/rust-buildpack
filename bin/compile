@@ -1,15 +1,12 @@
 #!/bin/bash
 # usage: bin/compile <build-dir> <cache-dir> <env-dir>
 
-set -eo pipefail
-
 # shellcheck disable=SC1090
 source "$( readlink -f "$( dirname "${0}" )/../vendor/cmnlib.sh" )"
 
 cmn::main::start "${0}" "${1}" "${2}" "${3}"
 
 # Have rustup install itself in cache directory.
-# shellcheck disable=SC2154
 RUSTUP_HOME="${cache_dir:?}/rustup"
 export RUSTUP_HOME
 
@@ -19,11 +16,11 @@ export CARGO_HOME="${cache_dir:?}/cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 
 cmn::step::start "Installing rust"
-pushd "$cache_dir" > /dev/null
+pushd "$cache_dir" > /dev/null || cmn::main::fail "${?}"
 
 if [ ! -x "rustup.sh" ]; then
     cmn::task::start "Downloading rustup (rust official installer)"
-    curl https://sh.rustup.rs -sSf > rustup.sh
+    cmn::file::download "https://sh.rustup.rs" "rustup.sh"
     chmod u+x rustup.sh
     cmn::task::finish
 fi
@@ -33,11 +30,10 @@ fi
 cmn::task::start "Installing rust"
 ./rustup.sh -y --profile minimal
 cmn::task::finish
-popd > /dev/null
+popd > /dev/null || cmn::main::fail "${?}"
 
 cmn::step::start "Compile the application"
 # `cargo install` builds release binaries and copy them in build_dir/bin directory.
-# shellcheck disable=SC2154
 cargo install --path "${build_dir:?}" --target-dir "${cache_dir:?}/target" --root "${build_dir:?}"
 
 cmn::main::finish
