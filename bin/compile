@@ -19,7 +19,7 @@ export CARGO_HOME="${cache_dir:?}/cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 
 cmn::step::start "Installing rust"
-pushd "$cache_dir"
+pushd "$cache_dir" > /dev/null
 
 if [ ! -x "rustup.sh" ]; then
     cmn::task::start "Downloading rustup (rust official installer)"
