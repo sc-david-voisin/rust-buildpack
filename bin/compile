@@ -10,7 +10,8 @@ cmn::main::start "${0}" "${1}" "${2}" "${3}"
 
 # Have rustup install itself in cache directory.
 # shellcheck disable=SC2154
-export RUSTUP_HOME="$cache_dir/rustup"
+RUSTUP_HOME="${cache_dir:?}/rustup"
+export RUSTUP_HOME
 
 # Have rustup install cargo in cache directory.
 # cargo holds rust tools executables and the downloaded packages.
