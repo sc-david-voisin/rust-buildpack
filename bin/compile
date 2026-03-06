@@ -38,6 +38,6 @@ popd > /dev/null
 cmn::step::start "Compile the application"
 # `cargo install` builds release binaries and copy them in build_dir/bin directory.
 # shellcheck disable=SC2154
-cargo install --path "$build_dir" --target-dir "$cache_dir/target" --root "$build_dir"
+cargo install --path "${build_dir:?}" --target-dir "${cache_dir:?}/target" --root "${build_dir:?}"
 
 cmn::main::finish
